@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-// Start scheduled importer
-require('./importer/scheduledImporter');
+// Import routes
+const placesRoutes = require('./routes/places');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,6 +11,9 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// API Routes - Use /places instead of /api/places
+app.use('/places', placesRoutes);
 
 // Serve static files from the React app build directory (when deployed)
 app.use(express.static(path.join(__dirname, '../dist')));
@@ -32,6 +35,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Mapify API server running on port ${PORT}`);
-  console.log('Scheduled food place importer is now active');
+  console.log(`Mapily API server running on port ${PORT}`);
+  console.log('MongoDB: test/restaurants');
 });

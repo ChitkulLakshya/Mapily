@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { fetchPlacesFromSheet } from "@/services/sheetService";
+import { fetchPlacesByCategory } from "@/services/sheetService";
 import PlaceCard from "@/components/PlaceCard";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -8,13 +8,14 @@ import "aos/dist/aos.css";
 
 /* ====== Types ====== */
 export interface Place {
+  Name: string;
+  Links: string;
+  Cost: string | number;
+  Collections: string;
+  Cuisines: string;
+  Timings: string;
+  Photo_URL: string;
   category: string;
-  name: string;
-  address: string;
-  rating: number;
-  imageURL: string;
-  description: string;
-  gallery?: string[];
 }
 
 /* ====== Categories ====== */
@@ -62,30 +63,34 @@ const Places = () => {
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
-    loadPlaces();
     setSelectedCategory(null);
   }, []);
 
+  // Fetch places when category is selected
   useEffect(() => {
     if (selectedCategory) {
-      setFilteredPlaces(places.filter((p) => p.category === selectedCategory));
+      loadPlacesByCategory(selectedCategory);
     } else {
       setFilteredPlaces([]);
+      setPlaces([]);
     }
-  }, [selectedCategory, places]);
+  }, [selectedCategory]);
 
-  async function loadPlaces() {
+  async function loadPlacesByCategory(category: string) {
     try {
       setLoading(true);
-      const data = await fetchPlacesFromSheet();
+      const data = await fetchPlacesByCategory(category);
       setPlaces(data || []);
+      setFilteredPlaces(data || []);
     } catch (err) {
       console.error(err);
       toast({
         title: "Error",
-        description: "Failed to load places. Please check Google Sheets.",
+        description: "Failed to load places from database. Please check your connection.",
         variant: "destructive",
       });
+      setPlaces([]);
+      setFilteredPlaces([]);
     } finally {
       setLoading(false);
     }
