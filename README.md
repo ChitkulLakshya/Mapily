@@ -36,6 +36,25 @@ npm i
 npm run dev
 ```
 
+## Automatic Importer
+
+This project also includes a fully automatic importer that runs on a schedule without any manual intervention.
+
+Features:
+- Runs automatically every 24 hours
+- Fetches data for multiple food categories
+- Saves data to MongoDB Atlas
+- Prevents duplicate entries
+- No manual input required
+
+To set up the automatic importer:
+
+1. Configure your Google Places API key and MongoDB Atlas connection string in `backend/.env`
+2. Start the backend server: `cd backend && npm start`
+3. The importer will run automatically daily at 2:00 AM
+
+See `backend/importer/README.md` for detailed instructions.
+
 **Edit a file directly in GitHub**
 
 - Navigate to the desired file(s).

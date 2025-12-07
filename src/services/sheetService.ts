@@ -32,3 +32,31 @@ export const fetchPlacesFromSheet = async (): Promise<Place[]> => {
     return [];
   }
 };
+
+/**
+ * Fetch places from Google Places API through our backend
+ * @param query Search query (e.g., "Cafes in Gachibowli")
+ * @param category Category to assign to places
+ */
+export const fetchPlacesFromGoogleAPI = async (query: string, category: string): Promise<any[]> => {
+  try {
+    const response = await fetch('http://localhost:3001/api/places/fetch', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, category }),
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to fetch places');
+    }
+
+    return data.places;
+  } catch (error) {
+    console.error("Error fetching places from Google API:", error);
+    throw error;
+  }
+};

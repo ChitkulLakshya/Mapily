@@ -6,13 +6,17 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden flex items-center justify-center">
+    <div className="relative w-screen h-screen overflow-hidden flex items-center justify-center desktop-background">
 
-      {/* Background Video */}
+      {/* Enhanced Desktop Background Video */}
       <div className="absolute inset-0 w-full h-full overflow-hidden">
         <iframe
           src="https://player.vimeo.com/video/1129096003?background=1&autoplay=1&loop=1&muted=1&controls=0"
-          className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-150"
+          className="w-full h-full absolute -translate-x-1/2 -translate-y-1/2 scale-150"
+          style={{
+            filter: 'brightness(1.1) contrast(1.15) saturate(1.2)',
+            imageRendering: 'crisp-edges',
+          }}
           frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen
@@ -20,8 +24,8 @@ const Home = () => {
         />
       </div>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/30" />
+      {/* Enhanced overlay for better clarity */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/40" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">

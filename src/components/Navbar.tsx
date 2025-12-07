@@ -6,6 +6,11 @@ import { Button } from '@/components/ui/button';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  
+  // Hide navbar on mobile view
+  if (location.pathname === '/mobileview') {
+    return null;
+  }
 
   const navLinks = [
     { name: 'Home', path: '/' },
