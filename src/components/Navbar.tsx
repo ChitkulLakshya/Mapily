@@ -62,7 +62,7 @@ const Navbar = () => {
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden bg-black/20 backdrop-blur-md">
+        <div className="md:hidden bg-black/90 backdrop-blur-md border-t border-white/10">
           <div className="px-4 pt-2 pb-3 space-y-1">
             {navLinks.map(link => (
               <Link

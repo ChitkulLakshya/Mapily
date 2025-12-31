@@ -33,6 +33,8 @@ const categories = [
 ];
 
 /* ====== Main Category Layout (tall cards) ====== */
+// We will handle responsive layout in the render method using Tailwind classes
+// instead of hardcoded grid spans here for mobile.
 const CATEGORY_LAYOUT = [
   { key: "Cafes", colSpan: 3, rowSpan: 2, h: "480px" },
   { key: "Restaurants", colSpan: 3, rowSpan: 2, h: "480px" },
@@ -44,15 +46,10 @@ const CATEGORY_LAYOUT = [
 ];
 
 /* ====== Inside-category grid settings ====== */
+// We'll use Tailwind grid classes instead of inline styles for responsiveness
 const INSIDE_GRID_SETTINGS: Record<string, { columns: number; rowHeight: string }> = {
   default: { columns: 3, rowHeight: "1fr" },
-  Cafes: { columns: 3, rowHeight: "1fr" },
-  Restaurants: { columns: 3, rowHeight: "1fr" },
-  "Food Trucks": { columns: 3, rowHeight: "1fr" },
-  Breakfast: { columns: 3, rowHeight: "1fr" },
-  "Fast Food": { columns: 3, rowHeight: "1fr" },
-  Snacks: { columns: 3, rowHeight: "1fr" },
-  Desserts: { columns: 3, rowHeight: "1fr" },
+  // ... others kept for reference if needed, but we'll override with CSS
 };
 
 /* ====== Places Component ====== */
@@ -149,6 +146,26 @@ const Places = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
+      <style>{`
+        .category-card {
+          grid-column: span 1;
+          grid-row: span 1;
+          height: 200px;
+        }
+        @media (min-width: 640px) {
+          .category-card {
+            height: 250px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .category-card {
+            grid-column: span var(--col-span);
+            grid-row: span var(--row-span);
+            height: var(--height);
+            min-height: var(--height);
+          }
+        }
+      `}</style>
       {/* Background Video */}
       <video
         ref={videoRef}
@@ -172,9 +189,10 @@ const Places = () => {
                 Explore Categories
               </h1>
 
-              <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(6, 1fr)" }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
                 {categories.map((cat) => {
                   const layout = getCategoryLayout(cat.name);
+                  
                   return (
                     <div
                       key={cat.name}
@@ -185,13 +203,12 @@ const Places = () => {
                         e.key === "Enter" && navigate(`/places/${cat.name}`)
                       }
                       data-aos="fade-up"
-                      className="relative cursor-pointer overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-transform"
+                      className="category-card relative cursor-pointer overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-transform"
                       style={{
-                        gridColumn: `span ${layout.colSpan}`,
-                        gridRow: `span ${layout.rowSpan}`,
-                        height: layout.h,
-                        minHeight: layout.h,
-                      }}
+                        '--col-span': layout.colSpan,
+                        '--row-span': layout.rowSpan,
+                        '--height': layout.h,
+                      } as React.CSSProperties}
                     >
                       <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -221,16 +238,10 @@ const Places = () => {
               )}
 
               {!loading && filteredPlaces.length > 0 && (() => {
-                const settings = getInsideGridSettings(selectedCategory);
                 return (
                   <div
                     data-aos="fade-up"
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: `repeat(${settings.columns}, 1fr)`,
-                      gridAutoRows: "1fr",
-                      gap: "16px",
-                    }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
                   >
                     {filteredPlaces.map((place, i) => (
                       <div key={i} className="w-full h-full overflow-hidden">
