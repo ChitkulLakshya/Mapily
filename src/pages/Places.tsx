@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchPlacesByCategory } from "@/services/sheetService";
 import PlaceCard from "@/components/PlaceCard";
 import { Loader2 } from "lucide-react";
@@ -16,6 +17,8 @@ export interface Place {
   Timings: string;
   Photo_URL: string;
   category: string;
+  latitude?: string | number;
+  longitude?: string | number;
 }
 
 /* ====== Categories ====== */
@@ -54,25 +57,30 @@ const INSIDE_GRID_SETTINGS: Record<string, { columns: number; rowHeight: string 
 
 /* ====== Places Component ====== */
 const Places = () => {
+  const { category } = useParams<{ category?: string }>();
+  const navigate = useNavigate();
+  
   const [places, setPlaces] = useState<Place[]>([]);
   const [filteredPlaces, setFilteredPlaces] = useState<Place[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // selectedCategory is now derived from the URL parameter
+  const selectedCategory = category || null;
+  
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
-    setSelectedCategory(null);
   }, []);
 
-  // Fetch places when category is selected
+  // Fetch places when category changes
   useEffect(() => {
     if (selectedCategory) {
       loadPlacesByCategory(selectedCategory);
     } else {
       setFilteredPlaces([]);
       setPlaces([]);
+      setLoading(false); // Ensure loading is false when no category is selected
     }
   }, [selectedCategory]);
 
@@ -172,9 +180,9 @@ const Places = () => {
                       key={cat.name}
                       role="button"
                       tabIndex={0}
-                      onClick={() => setSelectedCategory(cat.name)}
+                      onClick={() => navigate(`/places/${cat.name}`)}
                       onKeyDown={(e) =>
-                        e.key === "Enter" && setSelectedCategory(cat.name)
+                        e.key === "Enter" && navigate(`/places/${cat.name}`)
                       }
                       data-aos="fade-up"
                       className="relative cursor-pointer overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-transform"
@@ -246,7 +254,7 @@ const Places = () => {
       {/* Back Button */}
       {selectedCategory && (
         <button
-          onClick={() => setSelectedCategory(null)}
+          onClick={() => navigate('/places')}
           className="fixed bottom-4 left-4 bg-white text-black px-4 py-2 rounded-lg shadow-lg hover:bg-gray-200 z-50 transition"
         >
           ← Back

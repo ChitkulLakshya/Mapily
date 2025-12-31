@@ -1,5 +1,7 @@
-import { MapPin } from 'lucide-react';
+import { MapPin, Info } from 'lucide-react';
 import type { Place } from '@/pages/Places';
+import MapsButton from './MapsButton';
+import { Button } from './ui/button';
 
 interface PlaceCardProps {
   place: Place;
@@ -47,21 +49,48 @@ const PlaceCard = ({ place }: PlaceCardProps) => {
           </p>
         )}
 
-        {/* Map Icon Link */}
-        {place.Links && (
-          <div className="mt-auto">
-            <a
-              href={place.Links}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/90 transition"
-              onClick={(e) => e.stopPropagation()}
+        {/* Actions */}
+        <div className="mt-auto pt-4 flex gap-2">
+          {/* Info Button (Zomato) */}
+          {place.Links && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 gap-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(place.Links, '_blank', 'noopener,noreferrer');
+              }}
             >
-              <MapPin className="h-4 w-4 mr-2" />
-              View Location
-            </a>
-          </div>
-        )}
+              <Info className="w-4 h-4" />
+              Info
+            </Button>
+          )}
+
+          {/* Directions Button */}
+          {place.latitude && place.longitude ? (
+            <MapsButton 
+              lat={place.latitude} 
+              lng={place.longitude} 
+              className="flex-1"
+            />
+          ) : (
+            <Button
+              variant="default"
+              size="sm"
+              className="flex-1 gap-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Fallback to searching by name on Google Maps
+                const query = encodeURIComponent(place.Name + (place.category ? ` ${place.category}` : ''));
+                window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank', 'noopener,noreferrer');
+              }}
+            >
+              <MapPin className="w-4 h-4" />
+              Directions
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

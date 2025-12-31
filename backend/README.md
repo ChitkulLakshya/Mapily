@@ -16,6 +16,10 @@ This backend service provides a fully automatic importer that fetches places fro
    GOOGLE_PLACES_API_KEY=your_google_places_api_key
    MONGODB_URI=your_mongodb_atlas_connection_string
    PORT=3003
+   
+   # Optional: Redis Caching
+   USE_REDIS=false
+   # REDIS_URL=redis://localhost:6379
    ```
 
 3. **Start the Server**
@@ -24,6 +28,26 @@ This backend service provides a fully automatic importer that fetches places fro
    # or for development with auto-reload
    npm run dev
    ```
+
+## Caching (Redis vs In-Memory)
+
+By default, the application uses an **in-memory cache** which works out of the box without any external dependencies.
+
+### Enabling Redis (Optional)
+To use Redis for distributed caching:
+
+1. **Install Redis** (or use Docker):
+   ```bash
+   docker run --name mapily-redis -p 6379:6379 -d redis
+   ```
+
+2. **Update .env**:
+   ```env
+   USE_REDIS=true
+   REDIS_URL=redis://localhost:6379
+   ```
+
+The system handles failures gracefully. If Redis goes down, it automatically falls back to in-memory caching and logs the error only once to avoid console spam.
 
 ## Automatic Importer
 

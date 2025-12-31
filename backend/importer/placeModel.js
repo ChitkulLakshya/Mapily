@@ -50,13 +50,39 @@ const placeSchema = new mongoose.Schema({
     type: String,
     unique: true,
     sparse: true
-  }
+  },
+  city: {
+    type: String,
+    index: true
+  },
+  locality: {
+    type: String,
+    index: true
+  },
+  source: {
+    type: String,
+    default: 'auto'
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+    index: true
+  },
+  offers: [{
+    platform: String,
+    offerTitle: String,
+    discountValue: String,
+    terms: String,
+    validTill: String,
+    deeplink: String,
+    updatedAt: { type: Date, default: Date.now }
+  }]
 });
 
 // Index for faster queries
 placeSchema.index({ category: 1 });
 placeSchema.index({ name: 1 });
-placeSchema.index({ fsq_id: 1 });
+// fsq_id already has a unique index from the schema definition
 placeSchema.index({ updatedAt: 1 });
 
 module.exports = mongoose.model('Place', placeSchema, 'restaurants');

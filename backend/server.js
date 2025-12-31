@@ -4,6 +4,7 @@ const path = require('path');
 
 // Import routes
 const placesRoutes = require('./routes/places');
+const offersRoutes = require('./routes/offers');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // API Routes - Use /places instead of /api/places
 app.use('/places', placesRoutes);
+app.use('/offers', offersRoutes);
 
 // Serve static files from the React app build directory (when deployed)
 app.use(express.static(path.join(__dirname, '../dist')));
