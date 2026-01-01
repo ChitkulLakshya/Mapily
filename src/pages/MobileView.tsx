@@ -12,7 +12,7 @@ const MobileView = () => {
       <div className="absolute inset-0 w-full h-full overflow-hidden">
         <iframe
           src="https://player.vimeo.com/video/1144243656?background=1&autoplay=1&loop=1&muted=1&controls=0"
-          className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-150"
+          className="absolute inset-0 w-full h-full scale-150"
           style={{
             minWidth: '100%',
             minHeight: '100%',

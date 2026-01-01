@@ -12,7 +12,7 @@ const Home = () => {
       <div className="absolute inset-0 w-full h-full overflow-hidden">
         <iframe
           src="https://player.vimeo.com/video/1129096003?background=1&autoplay=1&loop=1&muted=1&controls=0"
-          className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
           style={{
             filter: 'brightness(1.1) contrast(1.15) saturate(1.2)',
             imageRendering: 'crisp-edges',
